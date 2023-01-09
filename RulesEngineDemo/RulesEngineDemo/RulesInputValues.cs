@@ -39,6 +39,17 @@ public class RulesInputValues
         },
         new()
         {
+            Name = "Franziska W.",
+            Age = 43,
+            Birthdate = new DateTime(1980, 1, 7),
+            AmountCarAccidents = 1,
+            HasCar = true,
+            HasDriversLicense = false,
+            Income = (decimal) 2391,
+            LicensePlate = "B GT 143"
+        },
+        new()
+        {
             Name = "Sabine W.",
             Age = 12,
             Birthdate = new DateTime(2010, 6, 3),

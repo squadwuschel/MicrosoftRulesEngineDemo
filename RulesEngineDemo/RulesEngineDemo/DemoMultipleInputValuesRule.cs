@@ -4,7 +4,7 @@ using RulesEngineDemo;
 
 namespace Demo;
 
-public class DemoExtendedRule
+public class DemoMultipleInputValuesRule
 {
     private const string Rule = """
             [
@@ -13,14 +13,19 @@ public class DemoExtendedRule
                   "Rules": [
                      {
                        "RuleName": "r0",
-                       "Expression": "input.AmountCarAccidents == 0 && input.HasCar == false",
-                       "SuccessEvent": "HatteKeineUnfaelle"
+                       "Expression": "input.LicensePlate.Contains(myConst.Dresden) == true",
+                       "SuccessEvent": "StadtDresden"
+                     },
+                     {
+                       "RuleName": "r1",
+                       "Expression": "input.LicensePlate.Contains(myConst.Berlin) == true",
+                       "SuccessEvent": "StadtBerlin"
                      },
                      {
                        "RuleName": "r2",
-                       "Expression": "input.AmountCarAccidents > 0 AND input.HasCar == true",
-                       "SuccessEvent": "HatteUnfaelle"
-                     }                     
+                       "Expression": "input.LicensePlate.Contains(myConst.AueSchwarzenberg) == true",
+                       "SuccessEvent": "StadtAueSchwarzb."
+                     }
                   ]
                 }
              ]
@@ -31,10 +36,13 @@ public class DemoExtendedRule
     public static async Task ExceuteRules()
     {
         var rulesEngine = new RulesEngine.RulesEngine(WorkflowRules!.ToArray());
+        var constInputs = new RulesConstInputs();
 
         foreach (var inputValue in RulesInputValues.RuleInputValuesList)
         {
-            var result = await rulesEngine.ExecuteAllRulesAsync("ProductionWorkflow", new RuleParameter("input", inputValue));
+            var result = await rulesEngine.ExecuteAllRulesAsync("ProductionWorkflow",
+                new RuleParameter("input", inputValue),
+                new RuleParameter("myConst", constInputs));
             result.ForEach(action =>
             {
                 Console.WriteLine(
@@ -42,4 +50,11 @@ public class DemoExtendedRule
             });
         }
     }
+}
+
+public class RulesConstInputs
+{
+    public string AueSchwarzenberg = "ASZ";
+    public string Berlin = "B";
+    public string Dresden = "DD";
 }

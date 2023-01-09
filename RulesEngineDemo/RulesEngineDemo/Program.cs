@@ -6,6 +6,6 @@ using Demo;
 //await DemoSimpleRule.ExceuteRules();
 //await DemoExtendedRule.ExceuteRules();
 //await DemoGlobalParamsRule.ExceuteRules();
-await DemoCustomRule.ExceuteRules();
-
+//await DemoCustomRule.ExceuteRules();
+await DemoMultipleInputValuesRule.ExceuteRules();
 Console.WriteLine("THE END");
