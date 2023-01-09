@@ -2,6 +2,10 @@
 
 using Demo;
 
-await DemoSimpleRule.ExceuteSimpleRule();
+
+//await DemoSimpleRule.ExceuteRules();
+//await DemoExtendedRule.ExceuteRules();
+//await DemoGlobalParamsRule.ExceuteRules();
+await DemoCustomRule.ExceuteRules();
 
 Console.WriteLine("THE END");

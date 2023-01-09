@@ -4,25 +4,18 @@ using RulesEngineDemo;
 
 namespace Demo;
 
-public class DemoSimpleRule
+public class DemoCustomRule
 {
     private const string Rule = """
             [
                {
-                  "WorkflowName": "ProductionWorkflow",
+                  "WorkflowName": "ProductionWorkflow", 
                   "Rules": [
                      {
                        "RuleName": "r0",
-                       "Expression": "input.AmountCarAccidents == 0", 
-                       "ErrorMessage": "One or more adjust rules failed.",
-                       "SuccessEvent": "HatteKeineUnfaelle"
-                     },
-                     {
-                       "RuleName": "r2",
-                       "Expression": "input.AmountCarAccidents > 0", 
-                       "ErrorMessage": "One or more adjust rules failed.",
-                       "SuccessEvent": "HatteUnfaelle"
-                     }                     
+                       "Expression": "input.Age == AgeCalculator.GetAge(input.Birthdate)",
+                       "SuccessEvent": "RichtigesAlter"
+                     }
                   ]
                 }
              ]
@@ -32,16 +25,31 @@ public class DemoSimpleRule
 
     public static async Task ExceuteRules()
     {
-        var rulesEngine = new RulesEngine.RulesEngine(WorkflowRules!.ToArray());
+        //ACHTUNG bei CustomRules diese müssen registriert werden, sonst sieht man im RuleResult die Exceptions!
+        var settings = new ReSettings() {CustomTypes = new Type[] {typeof(AgeCalculator)}};
+
+        var rulesEngine = new RulesEngine.RulesEngine(WorkflowRules!.ToArray(), settings);
 
         foreach (var inputValue in RulesInputValues.RuleInputValuesList)
         {
             var result = await rulesEngine.ExecuteAllRulesAsync("ProductionWorkflow", new RuleParameter("input", inputValue));
+            //Debug Exception zeigen, wenn die Settings nicht gesetzt wurden!
             result.ForEach(action =>
             {
                 Console.WriteLine(
                     $"Name: {inputValue.Name} \t => Rule:{action.Rule.RuleName} \t IsSuccess: {action.IsSuccess} \t EventName: {action.Rule.SuccessEvent} \t Expression: {action.Rule.Expression}");
             });
         }
+    }
+}
+
+public static class AgeCalculator
+{
+    public static int GetAge(DateTime birthdate)
+    {
+        var now = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
+        var dob = int.Parse(birthdate.ToString("yyyyMMdd"));
+        var age = (now - dob) / 10000;
+        return age;
     }
 }

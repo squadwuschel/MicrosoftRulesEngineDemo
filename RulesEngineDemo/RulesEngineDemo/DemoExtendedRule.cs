@@ -4,7 +4,7 @@ using RulesEngineDemo;
 
 namespace Demo;
 
-public class DemoSimpleRule
+public class DemoExtendedRule
 {
     private const string Rule = """
             [
@@ -13,14 +13,12 @@ public class DemoSimpleRule
                   "Rules": [
                      {
                        "RuleName": "r0",
-                       "Expression": "input.AmountCarAccidents == 0", 
-                       "ErrorMessage": "One or more adjust rules failed.",
+                       "Expression": "input.AmountCarAccidents == 0 && input.HasCar == false",
                        "SuccessEvent": "HatteKeineUnfaelle"
                      },
                      {
                        "RuleName": "r2",
-                       "Expression": "input.AmountCarAccidents > 0", 
-                       "ErrorMessage": "One or more adjust rules failed.",
+                       "Expression": "input.AmountCarAccidents > 0 && input.HasCar == true",
                        "SuccessEvent": "HatteUnfaelle"
                      }                     
                   ]

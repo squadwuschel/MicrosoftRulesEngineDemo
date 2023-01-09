@@ -7,7 +7,7 @@ public class RulesInputValues
         new()
         {
             Name = "Johannes R.",
-            Age = 39,
+            Age = 41,
             Birthdate = new DateTime(1982, 3, 15),
             AmountCarAccidents = 0,
             HasCar = true,
@@ -17,8 +17,8 @@ public class RulesInputValues
         },
         new()
         {
-            Name = "Max L.",
-            Age = 24,
+            Name = "Maximus L.",
+            Age = 25,
             Birthdate = new DateTime(1998, 1, 19),
             AmountCarAccidents = 1,
             HasCar = true,
@@ -29,7 +29,7 @@ public class RulesInputValues
         new()
         {
             Name = "Thomas H.",
-            Age = 44,
+            Age = 45,
             Birthdate = new DateTime(1977, 6, 3),
             AmountCarAccidents = 3,
             HasCar = false,
@@ -40,7 +40,7 @@ public class RulesInputValues
         new()
         {
             Name = "Sabine W.",
-            Age = 13,
+            Age = 12,
             Birthdate = new DateTime(2010, 6, 3),
             AmountCarAccidents = 0,
             HasCar = false,

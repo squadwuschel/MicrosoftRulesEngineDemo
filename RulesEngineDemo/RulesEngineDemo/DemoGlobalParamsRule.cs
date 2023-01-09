@@ -4,23 +4,31 @@ using RulesEngineDemo;
 
 namespace Demo;
 
-public class DemoSimpleRule
+public class DemoGlobalParamsRule
 {
     private const string Rule = """
             [
                {
-                  "WorkflowName": "ProductionWorkflow",
+                  "WorkflowName": "ProductionWorkflow", 
+                  "GlobalParams": [
+                      {
+                         "Name": "hasCarAndDriversLicense",
+                         "Expression": "input.HasCar == true && input.HasDriversLicense == true"
+                      },
+                      {
+                        "Name": "LowerName",
+                        "Expression": "input.Name.ToLower()"
+                      }
+                  ],
                   "Rules": [
                      {
                        "RuleName": "r0",
-                       "Expression": "input.AmountCarAccidents == 0", 
-                       "ErrorMessage": "One or more adjust rules failed.",
+                       "Expression": "input.AmountCarAccidents == 0 && hasCarAndDriversLicense",
                        "SuccessEvent": "HatteKeineUnfaelle"
                      },
                      {
                        "RuleName": "r2",
-                       "Expression": "input.AmountCarAccidents > 0", 
-                       "ErrorMessage": "One or more adjust rules failed.",
+                       "Expression": "input.AmountCarAccidents > 0 && hasCarAndDriversLicense",
                        "SuccessEvent": "HatteUnfaelle"
                      }                     
                   ]
