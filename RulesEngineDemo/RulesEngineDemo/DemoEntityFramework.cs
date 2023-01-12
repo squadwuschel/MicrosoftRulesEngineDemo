@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
-//  Licensed under the MIT License.
-
-using EFDataExample;
+﻿using EFDataExample;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RulesEngine.Models;
@@ -34,17 +31,36 @@ public class DemoEntityFramework
                 "RuleName": "r1",
                 "Expression": "isEnabled && input.SumBestellungen > 0 && input.Acos >= input.ZielAcos && input.AktuellesGebot >= input.CostPerClick && input.SumKlicks >= input.Klicks && input.Mindestgebot < input.AktuellesGebot",
                 "SuccessEvent": "GebotsReduzierung"
+              },
+              {
+                "RuleName": "r2",
+                "Expression": "isEnabled && input.SumBestellungen > 0 && input.Acos >= input.ZielAcos && input.AktuellesGebot >= input.CostPerClick && input.SumKlicks >= input.Klicks && input.Mindestgebot >= input.AktuellesGebot",
+                "SuccessEvent": "KeineGebotsanpassung"
+              },
+              {
+                "RuleName": "r11",
+                "Expression": "isEnabled && input.SumBestellungen > 0 && input.Acos >= input.ZielAcos && input.AktuellesGebot >= input.CostPerClick && input.SumKlicks < input.Klicks",
+                "SuccessEvent": "KeineGebotsanpassung"
+              },
+              {
+                "RuleName": "r3",
+                "Expression": "isEnabled && input.SumBestellungen > 0 && input.Acos >= input.ZielAcos && input.AktuellesGebot < input.CostPerClick",
+                "SuccessEvent": "KeineGebotsanpassung"
+              },
+              {
+                "RuleName": "r4",
+                "Expression": "isEnabled && input.SumBestellungen > 0 && input.Acos < input.ZielAcos && input.AktuellesGebot > input.CostPerClick",
+                "SuccessEvent": "KeineGebotsanpassung"
               }
             ]
           }
         ]
         """;
 
-    private static readonly List<RuleInputValues> RuleInputValuesList = new()
+    private static readonly List<RuleValues> RuleValuesList = new()
     {
-        new RuleInputValues(0, 40, 8, 0.8m, 0.01m, KampagnenArtEnum.SponsoredBrands, StatesEnum.paused),
-        new RuleInputValues(1, 9, 10, 1, 1, KampagnenArtEnum.SponsoredBrands, StatesEnum.enabled),
-        new RuleInputValues(1, 1, 10, 1, 1, KampagnenArtEnum.SponsoredBrands, StatesEnum.enabled)
+        new RuleValues(2, 35, (decimal) 4.69, (decimal) 0.36, (decimal) 0.21, KampagnenArtEnum.SponsoredBrands, 8,
+            36, 9, (decimal) 0.01, (decimal) 0.01, (decimal) 0.1, (decimal) 1, StatesEnum.enabled)
     };
 
     public static async Task ExceuteRules()
@@ -60,11 +76,13 @@ public class DemoEntityFramework
             db.SaveChanges();
         }
 
-        var workflows = db.Workflows.Include(i => i.Rules).ThenInclude(i => i.Rules).ToArray();
+        var workflows = db.Workflows.Include(i => i.Rules)
+            .ThenInclude(i => i.Rules)
+            .Include(p => p.GlobalParams).ToArray();
 
         var rulesEngine = new RulesEngine.RulesEngine(workflows, null);
 
-        foreach (var inputValue in RuleInputValuesList)
+        foreach (var inputValue in RuleValuesList)
         {
             var result = await rulesEngine.ExecuteAllRulesAsync("ProductionWorkflow", new RuleParameter("input", inputValue));
             result.ForEach(action =>
@@ -76,15 +94,22 @@ public class DemoEntityFramework
     }
 }
 
-public class RuleInputValues
+public class RuleValues
 {
-    public RuleInputValues(
+    public RuleValues(
         int sumBestellungen,
         int sumKlicks,
         decimal? acos,
         decimal aktuellesGebot,
         decimal? costPerClick,
         KampagnenArtEnum kampagnenArt,
+        int klicks,
+        int klicksFuersPausieren,
+        decimal zielAcos,
+        decimal gebotErhoehenUm,
+        decimal gebotReduzierenUm,
+        decimal mindestgebot,
+        decimal maximalgebot,
         StatesEnum state)
     {
         SumBestellungen = sumBestellungen;
@@ -93,20 +118,30 @@ public class RuleInputValues
         AktuellesGebot = aktuellesGebot;
         CostPerClick = costPerClick;
         KampagnenArt = kampagnenArt;
-        State = state;
+        Klicks = klicks;
+        KlicksFuersPausieren = klicksFuersPausieren;
+        ZielAcos = zielAcos;
+        GebotErhoehenUm = gebotErhoehenUm;
+        GebotReduzierenUm = gebotReduzierenUm;
+        Mindestgebot = mindestgebot;
+        Maximalgebot = maximalgebot;
+        State = state.ToString();
     }
 
     public int SumBestellungen { get; }
-
     public int SumKlicks { get; }
-
     public decimal? Acos { get; }
-
     public decimal AktuellesGebot { get; }
-
     public decimal? CostPerClick { get; }
     public KampagnenArtEnum KampagnenArt { get; }
-    public StatesEnum State { get; }
+    public int Klicks { get; }
+    public int KlicksFuersPausieren { get; }
+    public decimal ZielAcos { get; }
+    public decimal GebotErhoehenUm { get; }
+    public decimal GebotReduzierenUm { get; }
+    public decimal Mindestgebot { get; }
+    public decimal Maximalgebot { get; }
+    public string State { get; }
 }
 
 public enum KampagnenArtEnum
