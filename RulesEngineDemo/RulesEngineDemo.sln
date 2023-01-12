@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "RulesEngineDemo\Demo.csproj", "{421B01DB-D329-435D-9B88-80288156C7DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "RulesEngineDemo\Demo.csproj", "{421B01DB-D329-435D-9B88-80288156C7DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{FACDDCDF-91FA-48D0-AC44-63A6D807B44D}"
+	ProjectSection(SolutionItems) = preProject
+		..\readme.md = ..\readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
