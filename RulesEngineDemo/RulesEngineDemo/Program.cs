@@ -8,7 +8,7 @@ using Demo;
 //await DemoCustomRule.ExceuteRules();
 //await DemoMultipleInputValuesRule.ExceuteRules();
 //await DemoPostActionsRule.ExceuteRules();
-await DemoOperatorRule.ExceuteRules();
-//await DemoEntityFramework.ExceuteRules();
+//await DemoOperatorRule.ExceuteRules();
+await DemoEntityFramework.ExceuteRules();
 
 Console.WriteLine("THE END");

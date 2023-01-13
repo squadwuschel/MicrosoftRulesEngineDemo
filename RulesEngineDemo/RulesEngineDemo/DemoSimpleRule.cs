@@ -14,13 +14,13 @@ public class DemoSimpleRule
                   "Rules": [
                      {
                        "RuleName": "r0",
-                       "Expression": "input.AmountCarAccidents == 0", 
+                       "Expression": "input1.AmountCarAccidents == 0", 
                        "ErrorMessage": "One or more adjust rules failed.",
                        "SuccessEvent": "HatteKeineUnfaelle"
                      },
                      {
                        "RuleName": "r2",
-                       "Expression": "input.AmountCarAccidents > 0", 
+                       "Expression": "input1.AmountCarAccidents > 0", 
                        "ErrorMessage": "One or more adjust rules failed.",
                        "SuccessEvent": "HatteUnfaelle"
                      }                     
@@ -37,7 +37,8 @@ public class DemoSimpleRule
 
         foreach (var inputValue in RulesInputValues.RuleInputValuesList)
         {
-            var result = await rulesEngine.ExecuteAllRulesAsync("ProductionWorkflow", new RuleParameter("input", inputValue));
+            var result = await rulesEngine.ExecuteAllRulesAsync("ProductionWorkflow",
+                inputValue);
             result.ForEach(action =>
             {
                 Console.WriteLine(
@@ -45,6 +46,7 @@ public class DemoSimpleRule
             });
 
             result.OnSuccess((eventname) => { Console.WriteLine($"Success: {eventname}"); });
+            result.OnFail(() => Console.WriteLine("Hat nicht geklappt!"));
         }
     }
 }

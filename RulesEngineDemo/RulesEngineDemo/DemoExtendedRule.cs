@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using RulesEngine.Extensions;
 using RulesEngine.Models;
 using RulesEngineDemo;
 
@@ -40,6 +41,9 @@ public class DemoExtendedRule
                 Console.WriteLine(
                     $"Name: {inputValue.Name} \t => Rule:{action.Rule.RuleName} \t IsSuccess: {action.IsSuccess} \t EventName: {action.Rule.SuccessEvent} \t Expression: {action.Rule.Expression}");
             });
+
+            result.OnSuccess((eventname) => { Console.WriteLine($"Success: {eventname}"); });
+            result.OnFail(() => Console.WriteLine("Hat nicht geklappt!"));
         }
     }
 }

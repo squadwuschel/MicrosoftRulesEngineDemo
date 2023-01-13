@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using RulesEngine.Extensions;
 using RulesEngine.Models;
 using RulesEngineDemo;
 
@@ -62,6 +63,9 @@ public class DemoOperatorRule
                     }
                 }
             });
+
+            result.OnSuccess((eventname) => { Console.WriteLine($"Success: {eventname}"); });
+            result.OnFail(() => Console.WriteLine("Hat nicht geklappt!"));
         }
     }
 }

@@ -70,11 +70,11 @@ public class DemoEntityFramework
         //C:\Users\USERNAME\AppData\Local\RulesEngineDb\RulesEngineDemo.db
 
         var db = new RulesEngineDemoContext();
-        if (db.Database.EnsureCreated())
-        {
-            db.Workflows.AddRange(workflow);
-            db.SaveChanges();
-        }
+        //if (db.Database.EnsureCreated())
+        //{
+        //    db.Workflows.AddRange(workflow);
+        //    db.SaveChanges();
+        //}
 
         var workflows = db.Workflows.Include(i => i.Rules)
             .ThenInclude(i => i.Rules)
